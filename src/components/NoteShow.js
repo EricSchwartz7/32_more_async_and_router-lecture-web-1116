@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import { updateNote } from '../actions/'
+import { updateNote, deleteNote } from '../actions/'
 
 class NoteShow extends Component {
 
@@ -24,6 +24,11 @@ class NoteShow extends Component {
     //  3. Our reducer needs to be able to respond to that action type...
   }
 
+  handleClick(){
+    const noteId = this.props.note.id
+    this.props.deleteNote(noteId)
+  }
+
   render(){
     if ( !this.props.note ) {
       return (<div>Select or Add a Note to get started...</div>)
@@ -33,6 +38,7 @@ class NoteShow extends Component {
       <div>
         <h2>{ this.props.note.title }</h2>
         < input type='text' value={ this.props.note.body } onChange={this.handleChange.bind(this)}/>
+        <button onClick={this.handleClick.bind(this)}>X</button>
       </div>)
   }
 }
@@ -49,6 +55,10 @@ function mapDispatchToProps(dispatch){
   return {
     updateNote: function(noteParams){
       let action = updateNote( noteParams )
+      dispatch(action)
+    },
+    deleteNote: function(noteId){
+      let action = deleteNote( noteId )
       dispatch(action)
     }
   }
